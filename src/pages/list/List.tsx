@@ -27,8 +27,11 @@ const List: React.FC = () => {
   }, [bears]);
 
   useEffect(() => {
-    console.log(333);
-    if (items.length < 15) fetchBears("other");
+    console.log(333, items);
+    if (items.length < 15 && items.length > 1) {
+      console.log("TRUE");
+      fetchBears("other");
+    }
   }, [items, fetchBears]);
 
   // ! Func
@@ -46,7 +49,6 @@ const List: React.FC = () => {
     removeBears(selectedItems);
     setSelectedItems([]);
     setItems(takeData(bears, 0, 15));
-    console.log("REMOVE", items);
   };
   console.log("bears", bears);
 
