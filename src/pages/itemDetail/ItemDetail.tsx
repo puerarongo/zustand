@@ -49,8 +49,9 @@ const ItemDetail: React.FC = () => {
               <p className={styles.target}>target: {data.target_og}</p>
             </div>
             <h3 className={styles.description__title}>Description:</h3>
-            <p className={styles.description}></p>
-            <p className={styles.tips}>Brewers tips: {data.brewers_tips}</p>
+            <p className={styles.description}>{data.description}</p>
+            <p className={styles.tips__subtitle}>Brewers tips:</p>
+            <p className={styles.tips}>{data.brewers_tips}</p>
             <p className={styles.contributor}>
               Contributor: {data.contributed_by}
             </p>

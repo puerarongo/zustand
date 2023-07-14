@@ -60,11 +60,16 @@
 
 .description,
 .tips,
+.tips__subtitle,
 .contributor {
   font-size: 22px;
 }
 
 .description {
+  margin-bottom: 18px;
+}
+
+.tips__subtitle {
   margin-bottom: 18px;
 }
 

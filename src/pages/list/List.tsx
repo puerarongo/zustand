@@ -7,8 +7,8 @@ import takeData from "../../helpers/takeData";
 import styles from "./List.module.css";
 
 const List: React.FC = () => {
-  const [items, setItems] = useState<{}[] | []>([]);
   const [selectedItems, setSelectedItems] = useState<any>([]);
+  const [items, setItems] = useState<{}[] | []>([]);
 
   const { bears, fetchBears, removeBears } = useBearStore((state: any) => ({
     bears: state.bears,
@@ -30,10 +30,6 @@ const List: React.FC = () => {
     console.log(333);
     if (items.length < 15) fetchBears("other");
   }, [items, fetchBears]);
-
-  //useEffect(() => {
-  //  console.log(999, selectedItems);
-  //}, [selectedItems]);
 
   // ! Func
   const handleRightClick = (event: any, id: number) => {
@@ -70,6 +66,9 @@ const List: React.FC = () => {
                     name={el.name}
                     tagline={el.tagline}
                     date={el.first_brewed}
+                    style={
+                      selectedItems.includes(el.id) ? "included" : "excluded"
+                    }
                   />
                 </li>
               </Link>
