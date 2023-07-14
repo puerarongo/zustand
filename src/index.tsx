@@ -1,15 +1,25 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import ThemeProvider from "react-bootstrap/ThemeProvider";
+import { BrowserRouter } from "react-router-dom";
 import "./index.css";
-import App from "./components/App";
+import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+//!
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <App />
+    <BrowserRouter basename="/zustand">
+      <ThemeProvider
+        breakpoints={["xxxl", "xxl", "xl", "lg", "md", "sm", "xs", "xxs"]}
+        minBreakpoint="xxs"
+      >
+        <App />
+      </ThemeProvider>
+    </BrowserRouter>
   </React.StrictMode>
 );
 

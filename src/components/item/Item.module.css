@@ -1,0 +1,22 @@
+.container {
+  display: flex;
+  padding: 15px 20px;
+  color: #000;
+  background-color: #ece7e7;
+  border: 1px solid #585454;
+}
+
+.name {
+  margin-right: auto;
+  margin-left: 20px;
+}
+
+.tagline {
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.data {
+  margin-right: 20px;
+  margin-left: auto;
+}

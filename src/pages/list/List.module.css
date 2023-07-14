@@ -1,0 +1,13 @@
+.title {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.link {
+  text-decoration: none;
+}
+
+.item {
+  margin-bottom: 20px;
+  cursor: pointer;
+}
