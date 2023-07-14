@@ -81,7 +81,12 @@ const List: React.FC = () => {
         <h2>No one item</h2>
       )}
       {selectedItems.length > 0 && (
-        <Button variant="danger" onClick={removeItems}>
+        <Button
+          className={styles.button}
+          variant="danger"
+          size="lg"
+          onClick={removeItems}
+        >
           Remove items
         </Button>
       )}
