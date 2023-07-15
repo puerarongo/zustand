@@ -22,11 +22,11 @@ const List: React.FC = () => {
 
   // ! Life Cycle
   useEffect(() => {
-    if (count.current === 0) {
+    if (count.current === 0 && beers.length === 0) {
       fetchBeers("start");
       count.current = 1;
     }
-  }, [fetchBeers]);
+  }, [fetchBeers, beers]);
 
   useEffect(() => {
     setItems(takeData(beers, point, 15));
@@ -65,7 +65,8 @@ const List: React.FC = () => {
     const { scrollTop, clientHeight, scrollHeight } = event.target;
     console.log("SCROLL", scrollTop, clientHeight, scrollHeight);
     if (scrollTop + clientHeight === 1304) {
-      console.log("scroll", point);
+      event.target.scrollTop = 430;
+      console.log("scroll", point, scrollTop);
       removePoint.current = 1;
       setPoint((prevState) => prevState + 15);
     }
@@ -75,7 +76,6 @@ const List: React.FC = () => {
     if (point >= 15) {
       console.log("POINT");
       setItems(takeData(beers, point, 15));
-      //setPoint(10);
     }
   }, [point, beers, setPoint]);
 
@@ -89,7 +89,7 @@ const List: React.FC = () => {
           className={styles.list}
           onScroll={throttle((event) => {
             handleScroll(event);
-          }, 300)}
+          }, 400)}
         >
           {items.map((el: any) => {
             return (

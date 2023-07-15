@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useBeerStore } from "../../zustand/store";
 import { useParams, useNavigate } from "react-router-dom";
+import { Button } from "react-bootstrap";
 import findItem from "../../helpers/findItem";
 import Loader from "../../components/loader/Loader";
 import styles from "./ItemDetail.module.css";
@@ -42,6 +43,14 @@ const ItemDetail: React.FC = () => {
             />
           </div>
           <div className={styles.container__description}>
+            <Button
+              className={styles.button}
+              variant="primary"
+              size="lg"
+              onClick={() => navigate("/")}
+            >
+              Back
+            </Button>
             <h2 className={styles.title}>{data.name}</h2>
             <p className={styles.subtitle}>{data.tagline}</p>
             <div className={styles.detail}>

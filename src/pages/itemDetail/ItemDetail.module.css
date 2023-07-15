@@ -48,7 +48,6 @@
 }
 
 .abv {
-  margin-left: 20px;
   margin-right: 80px;
 }
 
@@ -79,4 +78,9 @@
 
 .contributor {
   font-style: italic;
+}
+
+.button {
+  text-align: left;
+  margin-bottom: 30px;
 }
