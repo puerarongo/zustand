@@ -10,8 +10,10 @@ const Item: React.FC<IItem> = ({ name, tagline, date, style }) => {
       }
     >
       <h3 className={styles.name}>{name}</h3>
-      <p className={styles.tagline}>{tagline}</p>
-      <p className={styles.date}>{date}</p>
+      <div className={styles.container__into}>
+        <p className={styles.tagline}>{tagline}</p>
+        <p className={styles.date}>{date}</p>
+      </div>
     </div>
   );
 };

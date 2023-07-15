@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useBearStore } from "../../zustand/store";
+import { useBeerStore } from "../../zustand/store";
 import { useParams, useNavigate } from "react-router-dom";
 import findItem from "../../helpers/findItem";
 import Loader from "../../components/loader/Loader";
@@ -9,20 +9,20 @@ const ItemDetail: React.FC = () => {
   const [data, setData] = useState<any>({});
   const [loading, setLoading] = useState<boolean>(false);
 
-  const { bears } = useBearStore((state: any) => ({
-    bears: state.bears,
+  const { beers } = useBeerStore((state: any) => ({
+    beers: state.beers,
   }));
 
   const navigate = useNavigate();
-  const id: string | undefined = useParams().bearId;
+  const id: string | undefined = useParams().beerId;
 
   useEffect(() => {
     setLoading(true);
     if (typeof id === "string") {
-      setData(findItem(bears, id));
+      setData(findItem(beers, id));
     }
     setLoading(false);
-  }, [id, bears]);
+  }, [id, beers]);
 
   useEffect(() => {
     if (data === undefined) navigate("/");
@@ -38,7 +38,7 @@ const ItemDetail: React.FC = () => {
             <img
               className={styles.image}
               src={data.image_url}
-              alt={`${data.name} bear`}
+              alt={`${data.name} beer`}
             />
           </div>
           <div className={styles.container__description}>

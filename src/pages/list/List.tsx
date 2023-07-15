@@ -1,38 +1,43 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Button from "react-bootstrap/Button";
+import { throttle } from "lodash";
 import { Link } from "react-router-dom";
-import { useBearStore } from "../../zustand/store";
+import { useBeerStore } from "../../zustand/store";
 import Item from "../../components/item/Item";
 import takeData from "../../helpers/takeData";
 import styles from "./List.module.css";
 
 const List: React.FC = () => {
+  const count = useRef<number>(0);
+  const removePoint = useRef<number>(0);
+  const [point, setPoint] = useState<number>(0);
   const [selectedItems, setSelectedItems] = useState<any>([]);
   const [items, setItems] = useState<{}[] | []>([]);
 
-  const { bears, fetchBears, removeBears } = useBearStore((state: any) => ({
-    bears: state.bears,
-    fetchBears: state.fetchBears,
-    removeBears: state.removeBears,
+  const { beers, fetchBeers, removeBeers } = useBeerStore((state: any) => ({
+    beers: state.beers,
+    fetchBeers: state.fetchBeers,
+    removeBeers: state.removeBeers,
   }));
 
   // ! Life Cycle
   useEffect(() => {
-    fetchBears("start");
-  }, [fetchBears]);
-
-  useEffect(() => {
-    console.log("!!!");
-    setItems(takeData(bears, 0, 15));
-  }, [bears]);
-
-  useEffect(() => {
-    console.log(333, items);
-    if (items.length < 15 && items.length > 1) {
-      console.log("TRUE");
-      fetchBears("other");
+    if (count.current === 0) {
+      fetchBeers("start");
+      count.current = 1;
     }
-  }, [items, fetchBears]);
+  }, [fetchBeers]);
+
+  useEffect(() => {
+    setItems(takeData(beers, point, 15));
+  }, [beers, point]);
+
+  useEffect(() => {
+    if (items.length < 15 && removePoint.current === 1) {
+      fetchBeers("other");
+      removePoint.current = 0;
+    }
+  }, [items, fetchBeers]);
 
   // ! Func
   const handleRightClick = (event: any, id: number) => {
@@ -46,17 +51,46 @@ const List: React.FC = () => {
   };
 
   const removeItems = () => {
-    removeBears(selectedItems);
+    removeBeers(selectedItems);
+    if (selectedItems.lenght <= point) {
+      setPoint((prevState) => prevState - selectedItems.length);
+    }
     setSelectedItems([]);
-    setItems(takeData(bears, 0, 15));
+    setItems(takeData(beers, 0, 15));
+    removePoint.current = 1;
   };
-  console.log("bears", bears);
+
+  const handleScroll = (event: any) => {
+    event.preventDefault();
+    const { scrollTop, clientHeight, scrollHeight } = event.target;
+    console.log("SCROLL", scrollTop, clientHeight, scrollHeight);
+    if (scrollTop + clientHeight === 1304) {
+      console.log("scroll", point);
+      removePoint.current = 1;
+      setPoint((prevState) => prevState + 15);
+    }
+  };
+
+  useEffect(() => {
+    if (point >= 15) {
+      console.log("POINT");
+      setItems(takeData(beers, point, 15));
+      //setPoint(10);
+    }
+  }, [point, beers, setPoint]);
+
+  //console.log("beers", beers, items);
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>Bears List</h1>
+      <h1 className={styles.title}>Beers List</h1>
       {items.length > 0 ? (
-        <ul className={styles.list}>
+        <ul
+          className={styles.list}
+          onScroll={throttle((event) => {
+            handleScroll(event);
+          }, 300)}
+        >
           {items.map((el: any) => {
             return (
               <Link className={styles.link} to={`${el.id}`} key={el.id}>

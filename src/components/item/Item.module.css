@@ -21,6 +21,13 @@
   box-shadow: 2px 2px 12px 2px rgba(0, 0, 0, 0.4);
 }
 
+.container__into {
+  display: flex;
+  width: 50%;
+  align-items: center;
+  margin-left: auto;
+}
+
 .name,
 .tagline,
 .date {
@@ -28,16 +35,26 @@
 }
 
 .name {
+  text-align: left;
   margin-right: auto;
   margin-left: 20px;
+  max-width: 450px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .tagline {
+  text-align: left;
   margin-right: auto;
-  margin-left: auto;
+  max-width: 400px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .date {
+  text-align: right;
   margin-right: 20px;
   margin-left: auto;
 }
