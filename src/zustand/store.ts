@@ -24,7 +24,7 @@ export const useBeerStore = create(
           const newArr = filterArr(state.beers, idArr);
           return { beers: newArr };
         }),
-      refreshBeersList: () => set({ bears: [], page: 1 }),
+      refreshBeersList: () => set({ beers: [], page: 1 }),
     })),
     {
       name: "beer-storage",
@@ -38,7 +38,6 @@ export const useItemsStore = create(
       items: [],
       addItems: (beersArr: any, point: number) => {
         const newItems = takeData(beersArr, point);
-        console.log(newItems);
         set({ items: [...newItems] });
       },
       refreshItems: () => set({ items: [] }),
@@ -52,6 +51,7 @@ export const usePointStore = create(
     devtools((set) => ({
       point: 0,
       pointOperation: (point: number) => {
+        if (point <= 0) point = 0;
         set({ point });
       },
       refreshPoint: () => set({ point: 0 }),

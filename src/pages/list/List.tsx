@@ -13,6 +13,7 @@ import styles from "./List.module.css";
 const List: React.FC = () => {
   const count = useRef<number>(0);
   const removePoint = useRef<number>(0);
+
   const [selectedItems, setSelectedItems] = useState<any>([]);
 
   const { beers, fetchBeers, removeBeers, refreshBeersList } = useBeerStore(
@@ -57,6 +58,10 @@ const List: React.FC = () => {
     }
   }, [items, fetchBeers]);
 
+  useEffect(() => {
+    if (point >= 5) addItems(beers, point);
+  }, [point, beers, addItems]);
+
   // ! Func
   const handleRightClick = (event: any, id: number) => {
     event.preventDefault();
@@ -88,22 +93,19 @@ const List: React.FC = () => {
 
   const handleScroll = (event: any) => {
     event.preventDefault();
+
     const { scrollTop, clientHeight, scrollHeight } = event.target;
     console.log("SCROLL", scrollTop, clientHeight, scrollHeight);
     if (scrollTop + clientHeight === 1304) {
       event.target.scrollTop = 430;
-      console.log("scroll", point, scrollTop);
       removePoint.current = 1;
       pointOperation(point + 5);
+    } else if (scrollTop + clientHeight === 428 && point > 0) {
+      event.target.scrollTop = 430;
+      removePoint.current = 1;
+      pointOperation(point - 5);
     }
   };
-
-  useEffect(() => {
-    if (point >= 5) {
-      console.log("POINT");
-      addItems(beers, point);
-    }
-  }, [point, beers, addItems]);
 
   console.log("beers", beers.length, point);
 
