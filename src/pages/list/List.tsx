@@ -8,13 +8,14 @@ import {
   usePointStore,
 } from "../../zustand/store";
 import Item from "../../components/item/Item";
+import IBeer from "../../helpers/interfaces/beer.interface";
 import styles from "./List.module.css";
 
 const List: React.FC = () => {
   const count = useRef<number>(0);
   const removePoint = useRef<number>(0);
 
-  const [selectedItems, setSelectedItems] = useState<any>([]);
+  const [selectedItems, setSelectedItems] = useState<number[]>([]);
 
   const { beers, fetchBeers, removeBeers, refreshBeersList } = useBeerStore(
     (state: any) => ({
@@ -63,7 +64,10 @@ const List: React.FC = () => {
   }, [point, beers, addItems]);
 
   // ! Func
-  const handleRightClick = (event: any, id: number) => {
+  const handleRightClick = <T extends HTMLElement>(
+    event: React.MouseEvent<T>,
+    id: number
+  ) => {
     event.preventDefault();
     if (selectedItems.includes(id)) {
       const newSelect = selectedItems.filter((el: number) => el !== id);
@@ -83,7 +87,7 @@ const List: React.FC = () => {
 
   const removeItems = () => {
     removeBeers(selectedItems);
-    if (selectedItems.lenght <= point) {
+    if (selectedItems.length <= point) {
       pointOperation(point - selectedItems.length);
     }
     setSelectedItems([]);
@@ -91,48 +95,40 @@ const List: React.FC = () => {
     removePoint.current = 1;
   };
 
-  const handleScroll = (event: any) => {
+  const handleScroll = (event: React.UIEvent<HTMLUListElement>) => {
     event.preventDefault();
+    let { scrollTop, clientHeight } = event.target as HTMLElement;
 
-    const { scrollTop, clientHeight, scrollHeight } = event.target;
-    console.log("SCROLL", scrollTop, clientHeight, scrollHeight);
     if (scrollTop + clientHeight === 1304) {
-      event.target.scrollTop = 430;
+      (event.target as HTMLElement).scrollTop = 430;
       removePoint.current = 1;
       pointOperation(point + 5);
     } else if (scrollTop + clientHeight === 428 && point > 0) {
-      event.target.scrollTop = 430;
+      (event.target as HTMLElement).scrollTop = 430;
       removePoint.current = 1;
       pointOperation(point - 5);
     }
   };
 
-  console.log("beers", beers.length, point);
-
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Beers List</h1>
       {items.length > 0 ? (
-        <ul
-          className={styles.list}
-          onScroll={throttle((event) => {
-            handleScroll(event);
-          }, 400)}
-        >
-          {items.map((el: any) => {
+        <ul className={styles.list} onScroll={throttle(handleScroll, 400)}>
+          {items.map(({ id, name, tagline, first_brewed }: IBeer) => {
             return (
-              <Link className={styles.link} to={`${el.id}`} key={el.id}>
+              <Link className={styles.link} to={`${id}`} key={id}>
                 <li
                   className={styles.item}
-                  onContextMenu={(event) => handleRightClick(event, el.id)}
+                  onContextMenu={(event) =>
+                    handleRightClick<HTMLLIElement>(event, id)
+                  }
                 >
                   <Item
-                    name={el.name}
-                    tagline={el.tagline}
-                    date={el.first_brewed}
-                    style={
-                      selectedItems.includes(el.id) ? "included" : "excluded"
-                    }
+                    name={name}
+                    tagline={tagline}
+                    date={first_brewed}
+                    style={selectedItems.includes(id) ? "included" : "excluded"}
                   />
                 </li>
               </Link>

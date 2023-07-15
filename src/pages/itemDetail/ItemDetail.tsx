@@ -4,10 +4,11 @@ import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import findItem from "../../helpers/findItem";
 import Loader from "../../components/loader/Loader";
+import IBeer from "../../helpers/interfaces/beer.interface";
 import styles from "./ItemDetail.module.css";
 
 const ItemDetail: React.FC = () => {
-  const [data, setData] = useState<any>({});
+  const [data, setData] = useState<IBeer>({} as IBeer);
   const [loading, setLoading] = useState<boolean>(false);
 
   const { beers } = useBeerStore((state: any) => ({
