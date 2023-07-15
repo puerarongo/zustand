@@ -68,12 +68,12 @@ const List: React.FC = () => {
       event.target.scrollTop = 430;
       console.log("scroll", point, scrollTop);
       removePoint.current = 1;
-      setPoint((prevState) => prevState + 15);
+      setPoint((prevState) => prevState + 5);
     }
   };
 
   useEffect(() => {
-    if (point >= 15) {
+    if (point >= 5) {
       console.log("POINT");
       setItems(takeData(beers, point, 15));
     }
