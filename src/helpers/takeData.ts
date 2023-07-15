@@ -1,5 +1,6 @@
-const takeData = (arr: any, skip: number, take: number) => {
+const takeData = (arr: any, skip: number) => {
   const result = [];
+  const take = 15;
 
   for (let i = 0; i < arr.length; i += 1) {
     if (result.length === take) break;

@@ -2,23 +2,41 @@ import React, { useState, useEffect, useRef } from "react";
 import Button from "react-bootstrap/Button";
 import { throttle } from "lodash";
 import { Link } from "react-router-dom";
-import { useBeerStore } from "../../zustand/store";
+import {
+  useBeerStore,
+  useItemsStore,
+  usePointStore,
+} from "../../zustand/store";
 import Item from "../../components/item/Item";
-import takeData from "../../helpers/takeData";
 import styles from "./List.module.css";
 
 const List: React.FC = () => {
   const count = useRef<number>(0);
   const removePoint = useRef<number>(0);
-  const [point, setPoint] = useState<number>(0);
   const [selectedItems, setSelectedItems] = useState<any>([]);
-  const [items, setItems] = useState<{}[] | []>([]);
 
-  const { beers, fetchBeers, removeBeers } = useBeerStore((state: any) => ({
-    beers: state.beers,
-    fetchBeers: state.fetchBeers,
-    removeBeers: state.removeBeers,
+  const { beers, fetchBeers, removeBeers, refreshBeersList } = useBeerStore(
+    (state: any) => ({
+      beers: state.beers,
+      fetchBeers: state.fetchBeers,
+      removeBeers: state.removeBeers,
+      refreshBeersList: state.refreshBeersList,
+    })
+  );
+
+  const { items, addItems, refreshItems } = useItemsStore((state: any) => ({
+    items: state.items,
+    addItems: state.addItems,
+    refreshItems: state.refreshItems,
   }));
+
+  const { point, pointOperation, refreshPoint } = usePointStore(
+    (state: any) => ({
+      point: state.point,
+      pointOperation: state.pointOperation,
+      refreshPoint: state.refreshPoint,
+    })
+  );
 
   // ! Life Cycle
   useEffect(() => {
@@ -29,8 +47,8 @@ const List: React.FC = () => {
   }, [fetchBeers, beers]);
 
   useEffect(() => {
-    setItems(takeData(beers, point, 15));
-  }, [beers, point]);
+    addItems(beers, point);
+  }, [beers, point, addItems]);
 
   useEffect(() => {
     if (items.length < 15 && removePoint.current === 1) {
@@ -50,13 +68,21 @@ const List: React.FC = () => {
     }
   };
 
+  const refreshHandler = () => {
+    console.log("REFRESH!");
+    refreshBeersList();
+    refreshItems();
+    refreshPoint();
+    window.location.reload();
+  };
+
   const removeItems = () => {
     removeBeers(selectedItems);
     if (selectedItems.lenght <= point) {
-      setPoint((prevState) => prevState - selectedItems.length);
+      pointOperation(point - selectedItems.length);
     }
     setSelectedItems([]);
-    setItems(takeData(beers, 0, 15));
+    addItems(beers, 0);
     removePoint.current = 1;
   };
 
@@ -68,18 +94,18 @@ const List: React.FC = () => {
       event.target.scrollTop = 430;
       console.log("scroll", point, scrollTop);
       removePoint.current = 1;
-      setPoint((prevState) => prevState + 5);
+      pointOperation(point + 5);
     }
   };
 
   useEffect(() => {
     if (point >= 5) {
       console.log("POINT");
-      setItems(takeData(beers, point, 15));
+      addItems(beers, point);
     }
-  }, [point, beers, setPoint]);
+  }, [point, beers, addItems]);
 
-  //console.log("beers", beers, items);
+  console.log("beers", beers.length, point);
 
   return (
     <div className={styles.container}>
@@ -114,16 +140,26 @@ const List: React.FC = () => {
       ) : (
         <h2>No one item</h2>
       )}
-      {selectedItems.length > 0 && (
+      <div className={styles.buttons__container}>
         <Button
-          className={styles.button}
-          variant="danger"
+          className={styles.button__refresh}
+          variant="success"
           size="lg"
-          onClick={removeItems}
+          onClick={refreshHandler}
         >
-          Remove items
+          Refresh list
         </Button>
-      )}
+        {selectedItems.length > 0 && (
+          <Button
+            className={styles.button__remove}
+            variant="danger"
+            size="lg"
+            onClick={removeItems}
+          >
+            Remove items
+          </Button>
+        )}
+      </div>
     </div>
   );
 };

@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 import getData from "../helpers/api/getdData";
 import filterArr from "../helpers/filterArr";
+import takeData from "../helpers/takeData";
 
 export const useBeerStore = create(
   persist(
@@ -23,7 +24,7 @@ export const useBeerStore = create(
           const newArr = filterArr(state.beers, idArr);
           return { beers: newArr };
         }),
-      removePages: () => set({ page: 0 }),
+      refreshBeersList: () => set({ bears: [], page: 1 }),
     })),
     {
       name: "beer-storage",
@@ -35,7 +36,26 @@ export const useItemsStore = create(
   persist(
     devtools((set) => ({
       items: [],
+      addItems: (beersArr: any, point: number) => {
+        const newItems = takeData(beersArr, point);
+        console.log(newItems);
+        set({ items: [...newItems] });
+      },
+      refreshItems: () => set({ items: [] }),
     })),
     { name: "items-storage" }
+  )
+);
+
+export const usePointStore = create(
+  persist(
+    devtools((set) => ({
+      point: 0,
+      pointOperation: (point: number) => {
+        set({ point });
+      },
+      refreshPoint: () => set({ point: 0 }),
+    })),
+    { name: "point-storage" }
   )
 );

@@ -38,6 +38,7 @@ const ItemDetail: React.FC = () => {
           <div className={styles.container__image}>
             <img
               className={styles.image}
+              loading="lazy"
               src={data.image_url}
               alt={`${data.name} beer`}
             />
