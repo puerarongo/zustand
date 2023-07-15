@@ -8,6 +8,7 @@ import {
   usePointStore,
 } from "../../zustand/store";
 import Item from "../../components/item/Item";
+import Loader from "../../components/loader/Loader";
 import IBeer from "../../helpers/interfaces/beer.interface";
 import styles from "./List.module.css";
 
@@ -78,7 +79,6 @@ const List: React.FC = () => {
   };
 
   const refreshHandler = () => {
-    console.log("REFRESH!");
     refreshBeersList();
     refreshItems();
     refreshPoint();
@@ -113,51 +113,61 @@ const List: React.FC = () => {
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Beers List</h1>
-      {items.length > 0 ? (
-        <ul className={styles.list} onScroll={throttle(handleScroll, 400)}>
-          {items.map(({ id, name, tagline, first_brewed }: IBeer) => {
-            return (
-              <Link className={styles.link} to={`${id}`} key={id}>
-                <li
-                  className={styles.item}
-                  onContextMenu={(event) =>
-                    handleRightClick<HTMLLIElement>(event, id)
-                  }
-                >
-                  <Item
-                    name={name}
-                    tagline={tagline}
-                    date={first_brewed}
-                    style={selectedItems.includes(id) ? "included" : "excluded"}
-                  />
-                </li>
-              </Link>
-            );
-          })}
-        </ul>
+      {beers.length === 0 ? (
+        <Loader />
       ) : (
-        <h2>No one item</h2>
+        <>
+          {items.length > 0 ? (
+            <ul className={styles.list} onScroll={throttle(handleScroll, 400)}>
+              {items.map(({ id, name, tagline, first_brewed }: IBeer) => {
+                return (
+                  <Link className={styles.link} to={`${id}`} key={id}>
+                    <li
+                      className={styles.item}
+                      onContextMenu={(event) =>
+                        handleRightClick<HTMLLIElement>(event, id)
+                      }
+                    >
+                      <Item
+                        name={name}
+                        tagline={tagline}
+                        date={first_brewed}
+                        style={
+                          selectedItems.includes(id) ? "included" : "excluded"
+                        }
+                      />
+                    </li>
+                  </Link>
+                );
+              })}
+            </ul>
+          ) : (
+            <div className={styles.contaner__notitem}>
+              <h2 className={styles.title__notitem}>No one item</h2>
+            </div>
+          )}
+          <div className={styles.buttons__container}>
+            <Button
+              className={styles.button__refresh}
+              variant="success"
+              size="lg"
+              onClick={refreshHandler}
+            >
+              Refresh list
+            </Button>
+            {selectedItems.length > 0 && (
+              <Button
+                className={styles.button__remove}
+                variant="danger"
+                size="lg"
+                onClick={removeItems}
+              >
+                Remove items
+              </Button>
+            )}
+          </div>
+        </>
       )}
-      <div className={styles.buttons__container}>
-        <Button
-          className={styles.button__refresh}
-          variant="success"
-          size="lg"
-          onClick={refreshHandler}
-        >
-          Refresh list
-        </Button>
-        {selectedItems.length > 0 && (
-          <Button
-            className={styles.button__remove}
-            variant="danger"
-            size="lg"
-            onClick={removeItems}
-          >
-            Remove items
-          </Button>
-        )}
-      </div>
     </div>
   );
 };

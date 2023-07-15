@@ -46,3 +46,16 @@
 .button__refresh {
   margin-right: 200px;
 }
+
+.contaner__notitem {
+  display: block;
+  text-align: center;
+  padding: 150px 0;
+}
+
+.title__notitem {
+  font-size: 36px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: rgb(44, 44, 44);
+}
