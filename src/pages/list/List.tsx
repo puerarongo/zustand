@@ -111,7 +111,7 @@ const List: React.FC = () => {
   };
 
   return (
-    <div className={styles.container}>
+    <section className={styles.container}>
       <h1 className={styles.title}>Beers List</h1>
       {beers.length === 0 ? (
         <Loader />
@@ -168,7 +168,7 @@ const List: React.FC = () => {
           </div>
         </>
       )}
-    </div>
+    </section>
   );
 };
 
