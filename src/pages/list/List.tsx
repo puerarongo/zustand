@@ -15,7 +15,6 @@ import styles from "./List.module.css";
 const List: React.FC = () => {
   const count = useRef<number>(0);
   const removePoint = useRef<number>(0);
-
   const [selectedItems, setSelectedItems] = useState<number[]>([]);
 
   const { beers, fetchBeers, removeBeers, refreshBeersList } = useBeerStore(
@@ -59,10 +58,6 @@ const List: React.FC = () => {
       removePoint.current = 0;
     }
   }, [items, fetchBeers]);
-
-  useEffect(() => {
-    if (point >= 5) addItems(beers, point);
-  }, [point, beers, addItems]);
 
   // ! Func
   const handleRightClick = <T extends HTMLElement>(
