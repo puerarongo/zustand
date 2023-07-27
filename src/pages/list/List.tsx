@@ -95,7 +95,7 @@ const List: React.FC = () => {
     let { scrollTop, clientHeight } = event.target as HTMLElement;
 
     if (scrollTop + clientHeight === 1304) {
-      (event.target as HTMLElement).scrollTop = 430;
+      (event.target as HTMLElement).scrollTop = 445;
       removePoint.current = 1;
       pointOperation(point + 5);
     } else if (scrollTop + clientHeight === 428 && point > 0) {
